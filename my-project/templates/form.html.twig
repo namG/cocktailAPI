@@ -2,10 +2,21 @@
 
 {% block body %}
 
-    <h1> Welcome to the crazy cocktail bar!!!!!!</h1>
+    <h1> Here's the list of cocktails!!!!!!</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
+{% for drink in response.drinks %}
+    <ul>
+        <li>{{ drink.strDrink }}
+        </li>
+        <li>{{ drink.strDrinkThumb }}
+        </li>
+        <li>{{ drink.idDrink }}
+        </li>
+    </ul>
+    {% endfor %}
+
+
+
+
 
 {% endblock %}

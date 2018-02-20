@@ -16,7 +16,7 @@ class IngredientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('Ingredients')
+            ->add('ingredient')
             ->add('search', SubmitType::class)
         ;
     }
