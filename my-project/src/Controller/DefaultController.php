@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use GuzzleHttp\Client;
 
 class DefaultController extends Controller
 {
@@ -35,12 +36,23 @@ class DefaultController extends Controller
      */
     public function newAction(Request $request)
     {
+        // Create a client with a base URI
+        $client = new Client(['base_uri' => 'http://www.cocktaildb.com/api/json/v1/1/filter.php?i']);
+
 
         $form = $this->createForm(IngredientType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $request = $client->get('/');
+
+//            dump($request);die();
+
+            $response = $request->getBody('Date');
+            echo $response->getContents();
+
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $search = $form->getData();
@@ -51,7 +63,7 @@ class DefaultController extends Controller
 //             $em->persist($search);
 //             $em->flush();
 
-            return $this->render('homepage');
+            return $this->render('index.html.twig');
         }
 
         return $this->render('index.html.twig', array(
