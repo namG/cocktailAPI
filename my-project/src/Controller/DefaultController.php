@@ -37,7 +37,6 @@ class DefaultController extends Controller
     public function newAction(Request $request)
     {
         // Create a client with a base URI
-        $client = new Client(['base_uri' => 'http://www.cocktaildb.com/api/json/v1/1/filter.php?i']);
 
 
         $form = $this->createForm(IngredientType::class);
@@ -46,24 +45,19 @@ class DefaultController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $request = $client->get('/');
-
-//            dump($request);die();
-
-            $response = $request->getBody('Date');
-            echo $response->getContents();
-
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
             $search = $form->getData();
 
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
-//             $em = $this->getDoctrine()->getManager();
-//             $em->persist($search);
-//             $em->flush();
+            $client = new Client();
+            $response = $client->request('GET','http://www.thecocktaildb.com/api/json/v1/1/filter.php?i=' .$search['ingredient']);
 
-            return $this->render('index.html.twig');
+            $response = \GuzzleHttp\json_decode($response->getBody()->getContents());
+
+
+
+            return $this->render('form.html.twig', array(
+                'response' => $response
+            ));
+
         }
 
         return $this->render('index.html.twig', array(
